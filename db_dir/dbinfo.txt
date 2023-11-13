@@ -1,0 +1,11 @@
+table|Administrator|Administrator|2|CREATE TABLE Administrator (id integer primary key autoincrement, name text unique, password text)
+index|sqlite_autoindex_Administrator_1|Administrator|3|
+table|sqlite_sequence|sqlite_sequence|4|CREATE TABLE sqlite_sequence(name,seq)
+table|User|User|5|CREATE TABLE User (id integer primary key autoincrement, name text unique, password text, creator boolean)
+index|sqlite_autoindex_User_1|User|6|
+table|Song|Song|7|CREATE TABLE Song (id integer primary key autoincrement, name text, genre text, singer text,
+release_date text, lyrics blob, path text, album_id integer, creator_id integer)
+table|Album|Album|8|CREATE TABLE Album (id integer primary key autoincrement, name text, genre text, singer text, creator_id integer)
+table|Playlist|Playlist|9|CREATE TABLE Playlist (id integer primary key autoincrement, name text, user_id integer)
+table|Song_Playlist|Song_Playlist|10|CREATE TABLE Song_Playlist (playlist_id integer, user_id integer, primary key (playlist_id, user_id))
+index|sqlite_autoindex_Song_Playlist_1|Song_Playlist|11|
