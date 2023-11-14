@@ -3,9 +3,45 @@ index|sqlite_autoindex_Administrator_1|Administrator|3|
 table|sqlite_sequence|sqlite_sequence|4|CREATE TABLE sqlite_sequence(name,seq)
 table|User|User|5|CREATE TABLE User (id integer primary key autoincrement, name text unique, password text, creator boolean)
 index|sqlite_autoindex_User_1|User|6|
-table|Song|Song|7|CREATE TABLE Song (id integer primary key autoincrement, name text, genre text, singer text,
-release_date text, lyrics blob, path text, album_id integer, creator_id integer)
+table|Song|Song|7|CREATE TABLE Song (id integer primary key autoincrement, name text, genre text, singer text,release_date text, lyrics blob, path text, album_id integer, creator_id integer)
 table|Album|Album|8|CREATE TABLE Album (id integer primary key autoincrement, name text, genre text, singer text, creator_id integer)
 table|Playlist|Playlist|9|CREATE TABLE Playlist (id integer primary key autoincrement, name text, user_id integer)
 table|Song_Playlist|Song_Playlist|10|CREATE TABLE Song_Playlist (playlist_id integer, user_id integer, primary key (playlist_id, user_id))
 index|sqlite_autoindex_Song_Playlist_1|Song_Playlist|11|
+
+-- -------------------------------------------
+
+CREATE TABLE Song (id integer primary key autoincrement,
+ name text not null,
+ genre text default "Unknown",
+ singer text not null,
+ rating integer default 0 check(rating >= 0 and rating <= 5),
+ release_date text, 
+ lyrics blob not null, 
+ path text not null, 
+ album_id integer, 
+ creator_id integer not null,
+ foreign key (album_id) references Album(id),
+ foreign key (creator_id) references User(id))
+
+ CREATE TABLE Album (id integer primary key autoincrement, 
+  name text not null, 
+  genre text default "Unknown", 
+  singer text not null, 
+  creator_id integer not null,
+  foreign key (creator_id) references User(id))
+
+CREATE TABLE Playlist (id integer primary key autoincrement,
+ name text not null, 
+ user_id integer not null,
+ foreign key (user_id) references User(id))
+
+CREATE TABLE Song_Playlist (playlist_id integer,
+ song_id integer,
+ primary key (playlist_id, song_id),
+ foreign key (playlist_id) references Playlist(id),
+ foreign key (song_id) references Song(id))
+
+ #############################################################################################
+
+ 
