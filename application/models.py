@@ -36,9 +36,6 @@ class Playlist(db.Model):
     name = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
 
-# fix column name user_id to song_id
-# include Foreign Key constraint
-# include Primary key constraint
 class Song_Playlist(db.Model):
     playlist_id = db.Column(db.Integer, db.ForeignKey('Playlist.id'), primary_key=True)
     song_id = db.Column(db.Integer, db.ForeignKey('Song.id'),  primary_key=True)
