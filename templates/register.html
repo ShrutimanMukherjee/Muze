@@ -20,5 +20,17 @@
             <input type="submit" value="Sign up">
         </div>
     </form>
+
+    {% if redo == True %}
+        <div id="error_block">
+            There was an error in registration.
+            Possible reasons:
+                <ol>
+                    <li> User name has been taken. Try with another user name. </li>
+                    <li> Other Server Errors </li>
+                </ol>
+        </div>
+    {% endif %}
+
 </body>
 </html>

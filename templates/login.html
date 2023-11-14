@@ -7,18 +7,47 @@
 </head>
 <body>
     <h1> {{person_type}} Login </h1>
-    <form action="/login" method="post">
+    
+    {% if person_type == "Administrator" %}
+    <form action="/admin_login" method="post">
         <div>
-            <label for="user">Username:</label>
-            <input type="text" id="user" name="user" required>
+            <label for="name">Username:</label>
+            <input type="text" id="name" name="name" required>
         </div>
         <div>
-            <label for="pass">Password:</label>
-            <input type="password" id="pass" name="pass" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
         </div>
         <div>
             <input type="submit" value="Log In">
         </div>
     </form>
+    {% else %}
+    <form action="/user_login" method="post">
+        <div>
+            <label for="name">Username:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div>
+            <input type="submit" value="Log In">
+        </div>
+    </form>
+    {% endif %}
+
+    {% if redo == True %}
+        <div id="error_block">
+            There was an error in logging in.
+            Possible reasons:
+                <ol>
+                    <li> User name doesn't exist. </li>
+                    <li> User name and password do not match </li>
+                    <li> Other Server Errors </li>
+                </ol>
+        </div>
+    {% endif %}
 </body>
 </html>
