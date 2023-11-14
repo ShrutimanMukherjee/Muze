@@ -6,14 +6,15 @@
     <title>Sign Up</title>
 </head>
 <body>
+    <h1> Enter the following details to register </h1>
     <form action="/register" method="post">
         <div>
-            <label for="user">Username:</label>
-            <input type="text" id="user" name="user">
+            <label for="name">Username:</label>
+            <input type="text" id="name" name="name" required>
         </div>
         <div>
-            <label for="pass">Password:</label>
-            <input type="password" id="pass" name="pass">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
         </div>
         <div>
             <input type="submit" value="Sign up">

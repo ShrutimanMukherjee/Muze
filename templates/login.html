@@ -6,14 +6,15 @@
     <title>Log In</title>
 </head>
 <body>
+    <h1> {{person_type}} Login </h1>
     <form action="/login" method="post">
         <div>
             <label for="user">Username:</label>
-            <input type="text" id="user" name="user">
+            <input type="text" id="user" name="user" required>
         </div>
         <div>
             <label for="pass">Password:</label>
-            <input type="password" id="pass" name="pass">
+            <input type="password" id="pass" name="pass" required>
         </div>
         <div>
             <input type="submit" value="Log In">

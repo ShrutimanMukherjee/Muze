@@ -1,5 +1,4 @@
 from .database import db
-from flask_login import UserMixin
 
 class Administrator(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -18,7 +17,7 @@ class Song(db.Model):
     genre = db.Column(db.Text, default="Unknown")
     singer = db.Column(db.Text, nullable=False)
     release_date = db.Column(db.Text)
-    rating = db.Column(db.Integer, default=0, db.CheckConstraint("rating >= 0 and rating <= 5"))
+    rating = db.Column(db.Integer, db.CheckConstraint("rating >= 0 and rating <= 5"), default=0)
     lyrics = db.Column(db.Text, nullable=False)
     path = db.Column(db.Text, nullable=False)
     album_id = db.Column(db.Integer, db.ForeignKey('Album.id'), nullable=True)
