@@ -33,18 +33,18 @@ def register():
 def login():
     global current_login
     if current_login and isinstance(current_login, User):
-        return redirect("/user_home")
+        return redirect("/user_home/"+current_login.name)
     if current_login and isinstance(current_login, Administrator):
-        return redirect("/admin_home")
+        return redirect("/admin_home/"+current_login.name)
     return render_template("loginoptions.html")
 
 @app.route("/user_login", methods=["GET", "POST"])
 def user_login():
     global current_login
     if current_login and isinstance(current_login, User):
-        return redirect("/user_home")
+        return redirect("/user_home/"+current_login.name)
     if current_login and isinstance(current_login, Administrator):
-        return redirect("/admin_home")
+        return redirect("/admin_home/"+current_login.name)
         
     if request.method == 'POST':
         p_name = request.form.get('name')
@@ -54,45 +54,55 @@ def user_login():
             return render_template("login.html", person_type="User", redo=True)
         
         current_login = user_obj
-        return redirect("/user_home")
+        return redirect("/user_home/"+p_name)
     return render_template("login.html", person_type="User", redo=False)
 
 @app.route("/admin_login", methods=["GET", "POST"])
 def admin_login():
     global current_login
     if current_login and isinstance(current_login, User):
-        return redirect("/user_home")
+        return redirect("/user_home/"+current_login.name)
     if current_login and isinstance(current_login, Administrator):
-        return redirect("/admin_home")
+        return redirect("/admin_home/"+current_login.name)
 
     if request.method == 'POST':
         p_name = request.form.get('name')
         p_password = request.form.get('password')
         admin_obj = Administrator.query.filter_by(name=p_name).first() 
-        print("* Admin select result =",admin_obj)
+        
         if (not admin_obj) or (admin_obj.password != p_password):
             return render_template("login.html", person_type="Administrator", redo=True)
         
         current_login = admin_obj
-        return redirect("/admin_home")
+        return redirect("/admin_home/"+p_name)
     return render_template("login.html", person_type="Administrator")
 
-@app.route("/user_home", methods=["GET", "POST"])
-def user_home():
-    global current_login
-    if (not current_login) or (not isinstance(current_login, User)):
+@app.route("/user_home/<p_name>", methods=["GET", "POST"])
+def user_home(p_name):    
+    user_obj = User.query.filter_by(name=p_name).first()     
+    if (not user_obj) or (current_login.name != p_name):
         return redirect("/login")
-    return render_template("user_home.html", name=current_login.name)
+    return render_template("user_home.html", user=user_obj)
 
-@app.route("/admin_home", methods=["GET", "POST"])
-def admin_home():
-    global current_login
-    if (not current_login) or (not isinstance(current_login, Administrator)):
+@app.route("/admin_home/<p_name>", methods=["GET", "POST"])
+def admin_home(p_name):    
+    admin_obj = Administrator.query.filter_by(name=p_name).first()     
+    if (not admin_obj) or (current_login.name != p_name):
         return redirect("/login")
-    return render_template("admin_home.html", name=current_login.name)
+    return render_template("admin_home.html", admin=admin_obj)
 
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
     global current_login
     current_login = None
     return redirect("/")
+
+@app.route("/make_creator/<p_name>", methods=["GET", "POST"])
+def make_creator(p_name):
+    global current_login
+    user_obj = User.query.filter_by(name=p_name).first() 
+    if (not current_login):
+        return redirect("/")
+    user_obj.creator = 1    
+    db.session.commit()    
+    return redirect("/user_home/"+p_name)

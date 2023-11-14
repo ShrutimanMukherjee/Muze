@@ -3,9 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> {{name}} </title>
+    <title> {{user.name}} </title>
 </head>
 <body>
-    <h1> Welcome {{name}} </h1>
+    <header>
+        <h1> Welcome {{user.name}} </h1>
+        {% if user.creator == 0 %}
+        <button onclick="location.href = '/make_creator/{{user.name}}';" id="make_creator"> Register as Creator </button>
+        {% else %}
+        <span >
+            Creator registered !
+        </span>
+        {% endif %}
+        <button onclick="location.href = '/logout';" id="logout"> Log Out </button>
+    </header>    
 </body>
 </html>
