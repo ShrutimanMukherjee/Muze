@@ -4,11 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Admin {{admin.name}} </title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            margin : auto;
+        }
+
+        .table_div {
+            width : 50%;
+            margin : auto;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <header>
         <h1> Welcome {{admin.name}} </h1>
         <button onclick="location.href = '/logout';" id="logout"> Log Out </button>
     </header>
+
+    <div class="table_div">
+        <h2> Some Useful Stats </h2>
+        <table width="40%">
+            <tr>
+                <td> Total Songs: </td>
+                <td> {{ songs|length }} </td>
+            </tr>
+            <tr>
+                <td> Total Users: </td>
+                <td> {{ users|length }} </td>
+            </tr>
+            <tr>
+                <td> Total Creators: </td>
+                <td> {{ creators|length }} </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="table_div">
+        <h2> All Songs </h2>
+        <table style="width:100%;">
+            <tr>
+                <th> Song Name</th>
+                <th> Singer </th>
+                <th> Rating </th>
+                <th> Options </th>
+            </tr>
+
+            {% for song in songs %}
+            <tr>
+                <td> {{song.name}} </td>
+                <td> {{song.singer}} </td>
+                <td> {{song.rating}} </td>
+                <td> 
+                    <!-- <button onclick="location.href = '#';"> Play </button> <br> -->
+                    <audio controls>
+                        <source src="{{url_for('play_song', filename=song.path[ song.path.rindex('/'): ])}}" type="audio/mpeg">
+                        Browser is not compatible with audio tag.
+                    </audio>
+                    <br>
+                    <button onclick="location.href = '/view_song/{{song.name}}';"> View </button>
+                    <button onclick="location.href = '/delete_song/{{song.name}}';"> Delete </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 </body>
 </html>

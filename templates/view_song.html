@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {{song.name}} </title>
+    <style>
+        table {
+            width : 90%;
+            margin : auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+    </header>
+
+    <div style="text-align: center;">
+        <h2> {{song.name}} </h2>
+        <table border="1">
+            <tr>
+                <td width="10%"> Genre : </td>
+                <td> {{song.genre}} </td>
+
+                <td width="18%">
+                    <form action="/view_song/{{song.name}}" method="post"> <!-- rating by post end point on view then back -->
+                        <div>
+                            <label for="rate">Rate the song:</label>
+                            <input type="number" id="rate" name="rate" min=0 max=5 step=0.1 required>
+                        </div>
+                        <input type="submit" value="Rate">
+                    </form>
+
+                    {% if user.id==song.creator_id %}
+                    <br> <button onclick="location.href = '/edit_song/{{song.name}}';"> Edit </button>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td> Singer : </td>
+                <td> {{song.singer}} </td>
+            </tr>
+            <tr>
+                <td> Lyrics : </td>
+                <td> {{song.lyrics}} </td>
+                <!-- <td> {{song.lyrics.replace("\n", '\"<br>\"')}} </td> -->
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>

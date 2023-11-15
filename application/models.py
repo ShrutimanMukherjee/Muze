@@ -20,11 +20,12 @@ class Album(db.Model):
 
 class Song(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.Text, nullable=False)
+    name = db.Column(db.Text, unique=True, nullable=False)
     genre = db.Column(db.Text, default="Unknown")
     singer = db.Column(db.Text, nullable=False)
     release_date = db.Column(db.Text)
-    rating = db.Column(db.Integer, db.CheckConstraint("rating >= 0 and rating <= 5"), default=0)
+    rating = db.Column(db.Float, db.CheckConstraint("rating >= 0 and rating <= 5"), default=0.0)
+    n_rating = db.Column(db.Integer, default=0)
     lyrics = db.Column(db.Text, nullable=False)
     path = db.Column(db.Text, nullable=False)
     album_id = db.Column(db.Integer, db.ForeignKey(Album.id)) # Changed Here
