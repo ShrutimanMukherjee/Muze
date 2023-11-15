@@ -11,8 +11,15 @@ class User(db.Model):
     password = db.Column(db.Text, nullable=False)
     creator =  db.Column(db.Boolean, default=0)
 
-class Song(db.Model):
+class Album(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text, unique=True, nullable=False)
+    genre = db.Column(db.Text, default="Unknown")
+    singer = db.Column(db.Text, nullable=False)
+    creator_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
+
+class Song(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Text, nullable=False)
     genre = db.Column(db.Text, default="Unknown")
     singer = db.Column(db.Text, nullable=False)
@@ -20,15 +27,8 @@ class Song(db.Model):
     rating = db.Column(db.Integer, db.CheckConstraint("rating >= 0 and rating <= 5"), default=0)
     lyrics = db.Column(db.Text, nullable=False)
     path = db.Column(db.Text, nullable=False)
-    album_id = db.Column(db.Integer, db.ForeignKey('Album.id'), nullable=True)
-    creator_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
-
-class Album(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text, nullable=False)
-    genre = db.Column(db.Text, default="Unknown")
-    singer = db.Column(db.Text, nullable=False)
-    creator_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
+    album_id = db.Column(db.Integer, db.ForeignKey(Album.id)) # Changed Here
+    creator_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False) # Changed Here
 
 class Playlist(db.Model):
     id = db.Column(db.Integer, primary_key=True)

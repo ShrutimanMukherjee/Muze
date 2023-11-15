@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Song</title>
+</head>
+<body>
+    <h1> Enter the Song details </h1>
+    
+    <form action="/add_song" method="post" enctype="multipart/form-data">
+        <div>
+            <label for="name">Song Title:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="genre">Genre:</label>
+            <input type="text" id="genre" name="genre">
+        </div>
+        <div>
+            <label for="singer">Singer:</label>
+            <input type="text" id="singer" name="singer" required>
+        </div>
+        <div>
+            <label for="release_date">Release_date:</label>
+            <input type="date" id="release_date" name="release_date">
+        </div>
+        <div>
+            <label for="lyrics">Lyrics:</label><br>
+            <textarea name="lyrics" id="lyrics" rows="10" cols="80" required></textarea>
+        </div>
+        <div>
+            <label for="file">Upload Music File:</label>
+            <input type="file" id="file" name="file" required>
+        </div>
+        <div>
+            <input type="submit" value="Submit Song">
+        </div>
+    </form>
+
+</body>
+</html>
