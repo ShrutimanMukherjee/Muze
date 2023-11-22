@@ -24,12 +24,11 @@ table|Song|Song|7|CREATE TABLE Song (id integer primary key autoincrement,
  name text unique not null,
  genre text default "Unknown",
  singer text not null,
- rating integer default 0 check(rating >= 0 and rating <= 5),
  release_date text,
  lyrics text not null,
  path text not null,
  album_id integer,
- creator_id integer not null,
+ creator_id integer not null, n_rating integer default 0, rating real default 0.0 check(rating >= 0 and rating <= 5),
  foreign key (album_id) references Album(id),
  foreign key (creator_id) references User(id))
 index|sqlite_autoindex_Song_1|Song|13|
