@@ -16,7 +16,7 @@ class Album(db.Model):
     name = db.Column(db.Text, unique=True, nullable=False)
     genre = db.Column(db.Text, default="Unknown")
     singer = db.Column(db.Text, nullable=False)
-    creator_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
+    creator_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
 
 class Song(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -34,8 +34,8 @@ class Song(db.Model):
 class Playlist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
 
 class Song_Playlist(db.Model):
-    playlist_id = db.Column(db.Integer, db.ForeignKey('Playlist.id'), primary_key=True)
-    song_id = db.Column(db.Integer, db.ForeignKey('Song.id'),  primary_key=True)
+    playlist_id = db.Column(db.Integer, db.ForeignKey(Playlist.id), primary_key=True)
+    song_id = db.Column(db.Integer, db.ForeignKey(Song.id),  primary_key=True)

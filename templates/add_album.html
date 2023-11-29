@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Album</title>
+</head>
+<body>
+    <h1> Enter the Album details </h1>
+    
+    <form action="/add_album" method="post" enctype="multipart/form-data">
+        <div>
+            <label for="name">Album Title:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="genre">Genre:</label>
+            <input type="text" id="genre" name="genre">
+        </div>
+        <div>
+            <label for="singer">Singer:</label>
+            <input type="text" id="singer" name="singer" required>
+        </div>
+        <div>
+            <label for="songs">Choose songs for Album:</label>
+            <select id="songs" name="songs" multiple required>
+                {% for song in songs %} 
+                    <option value="{{song.id}}">{{song.name}} by {{song.singer}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <input type="submit" value="Submit Album">
+        </div>
+    </form>
+
+</body>
+</html>

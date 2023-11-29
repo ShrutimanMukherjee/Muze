@@ -113,6 +113,7 @@ def make_creator(p_name):
     db.session.commit()    
     return redirect("/user_home/"+p_name)
 
+# -------------- SONG -------------------------------
 @app.route("/add_song", methods=["GET", "POST"])
 def add_song():
     global current_login
@@ -232,3 +233,41 @@ def delete_song(p_name):
     except Exception as e:
         print(e)
     return redirect("/admin_home/"+current_login.name)
+
+# -------------------------- Album -----------------------------------
+@app.route("/add_album", methods=["GET", "POST"]) # PendingFront end - user option and display result
+def add_album():
+    global current_login
+    if not current_login:
+        return redirect("/login")
+    if (not isinstance(current_login, User)) or (current_login.creator==0):
+        return "Only a <b>User account registered as creator</b> can add albums."
+    
+    p_valid_songs = Song.query.filter_by(creator_id=current_login.id).all()
+    
+    if request.method == 'POST':
+        p_name = request.form.get('name')
+        p_genre = request.form.get('genre')
+        p_singer = request.form.get('singer')
+        p_song_ids = request.form.getlist('songs')        
+
+        album_obj = Album(name=p_name, genre=p_genre, singer=p_singer, creator_id=current_login.id)
+        try:
+            db.session.add(album_obj)
+            db.session.commit()
+        except Exception as e:
+            print(e)
+            return render_template("add_album.html", songs=p_valid_songs)
+        
+        for p_song_id in p_song_ids:
+            song_res = Song.query.filter_by(id=p_song_id).first()
+            # update album id
+            try:
+                song_res.album_id = album_obj.id
+                db.session.commit()
+            except Exception as e:
+                print(e)
+                return render_template("add_album.html", songs=p_valid_songs)
+        return redirect("/user_home/"+current_login.name)
+    
+    return render_template("add_album.html", songs=p_valid_songs)
