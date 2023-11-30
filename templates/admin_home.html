@@ -70,5 +70,26 @@
             {% endfor %}
         </table>
     </div>
+
+    <div class="table_div">
+        <h2> All Albums </h2>
+        <table style="width:100%;">
+            <tr>
+                <th> Album Name</th>
+                <th> Singer </th>
+                <th> Options </th>
+            </tr>
+
+            {% for album in albums %}
+            <tr>
+                <td> {{album.name}} </td>
+                <td> {{album.singer}} </td>
+                <td> 
+                    <button onclick="location.href = '/view_album/{{album.name}}';"> View Album</button>
+                    <br> <button onclick="location.href = '/delete_album/{{album.name}}';"> Delete Album </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
 </body>
 </html>

@@ -28,6 +28,7 @@
         </span>
         {% endif %}
         <button onclick="location.href = '/add_song';" id="add_song"> Add New Song </button>
+        <button onclick="location.href = '/add_album';" id="add_album"> Add New Album </button>
         <button onclick="location.href = '/logout';" id="logout"> Log Out </button>
     </header>
 
@@ -66,7 +67,8 @@
             <tr>
                 <th> Song Name</th>
                 <th> Singer </th>
-                <th> Play </th>
+                <th> Rating </th>
+                <th> Options </th>
             </tr>
 
             {% for song in user_songs %}
@@ -80,7 +82,55 @@
                         Browser is not compatible with audio tag.
                     </audio>
                     <br>
-                    <button onclick="location.href = '/view_song/{{song.name}}';"> View </button>
+                    <br> <button onclick="location.href = '/edit_song/{{song.name}}';"> Edit </button>
+                    <br> <button onclick="location.href = '/delete_song/{{song.name}}';"> Delete </button>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!-- ---------------------------------------------------------------- -->
+
+    <div class="table_div">
+        <h2> All Albums </h2>
+        <table style="width:100%;">
+            <tr>
+                <th> Album Name</th>
+                <th> Singer </th>
+                <th> Options </th>
+            </tr>
+
+            {% for album in albums %}
+            <tr>
+                <td> {{album.name}} </td>
+                <td> {{album.singer}} </td>
+                <td> 
+                    <button onclick="location.href = '/view_album/{{album.name}}';"> View Album</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="table_div">
+        <h2> Your Albums </h2>
+        <table style="width:100%;">
+            <tr>
+                <th> Album Name</th>
+                <th> Singer </th>
+                <th> Options </th>
+            </tr>
+
+            {% for album in user_albums %}
+            <tr>
+                <td> {{album.name}} </td>
+                <td> {{album.singer}} </td>
+                <td> 
+                    <button onclick="location.href = '/view_album/{{album.name}}';"> View Album</button>
+                    <br> <button onclick="location.href = '/edit_album/{{album.name}}';"> Edit Album Details </button>
+                    <br> <button onclick="location.href = '/delete_album/{{album.name}}';"> Delete Album </button>
                 </td>
             </tr>
             {% endfor %}

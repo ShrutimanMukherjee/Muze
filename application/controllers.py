@@ -85,7 +85,10 @@ def user_home(p_name):
     
     songs_res = Song.query.all()
     user_songs_res = Song.query.filter_by(creator_id=user_obj.id).all()
-    return render_template("user_home.html", user=user_obj, songs=songs_res, user_songs=user_songs_res)
+    albums_res = Album.query.all()
+    user_albums_res = Album.query.filter_by(creator_id=user_obj.id).all()
+    return render_template("user_home.html", user=user_obj, songs=songs_res, user_songs=user_songs_res,
+                                             albums=albums_res, user_albums=user_albums_res)
 
 @app.route("/admin_home/<p_name>", methods=["GET", "POST"])
 def admin_home(p_name):    
@@ -93,9 +96,10 @@ def admin_home(p_name):
     if (not admin_obj) or (not current_login) or (current_login.name != p_name):
         return redirect("/login")
     songs_res = Song.query.all()
+    albums_res = Album.query.all()
     users_res = User.query.all()
     creators_res = User.query.filter_by(creator=1).all()
-    return render_template("admin_home.html", admin=admin_obj, songs=songs_res, users=users_res, creators=creators_res)
+    return render_template("admin_home.html", admin=admin_obj, songs=songs_res, albums=albums_res, users=users_res, creators=creators_res)
 
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
@@ -222,8 +226,8 @@ def delete_song(p_name):
     song_res = Song.query.filter_by(name=p_name).first()
     if not current_login:
         return redirect("/login")
-    if (not isinstance(current_login, Administrator)):
-        return "Only an <b>Administrator</b> can delete songs."
+    if ((not isinstance(current_login, Administrator)) and (current_login.id != album_res.creator_id)):
+        return "Only an <b>Administrator or Respective Creator</b> can delete songs."
     if (not song_res):
         return redirect("/user_home/"+current_login.name)
     
@@ -271,3 +275,84 @@ def add_album():
         return redirect("/user_home/"+current_login.name)
     
     return render_template("add_album.html", songs=p_valid_songs)
+
+@app.route("/edit_album/<p_name>", methods=["GET", "POST"])
+def edit_album(p_name):
+    global current_login
+    if not current_login:
+        return redirect("/login")
+    
+    album_res = Album.query.filter_by(name=p_name).first()
+    p_valid_songs = Song.query.filter_by(creator_id=current_login.id).all()
+    if (not isinstance(current_login, User)) or (current_login.creator==0) or (current_login.id != album_res.creator_id):
+        return "Only the <b>Creator for this file</b> can edit this album."
+    
+    if (not album_res):
+        return redirect("/user_home/"+current_login.name)
+    
+    if request.method == 'POST':
+
+        p_genre = request.form.get('genre')
+        p_singer = request.form.get('singer')
+        p_song_ids = request.form.getlist('songs')               
+
+        try:
+            album_res.genre = p_genre
+            album_res.singer = p_singer
+
+            db.session.commit()
+        except Exception as e:
+            print(e)
+            return render_template("edit_album.html", album=album_res, album_songs=p_valid_songs)
+        
+        for p_song_id in p_song_ids:
+            song_res = Song.query.filter_by(id=p_song_id).first()
+            # update album id
+            try:
+                song_res.album_id = album_res.id
+                db.session.commit()
+            except Exception as e:
+                print(e)
+                return render_template("edit_album.html", album=album_res, album_songs=p_valid_songs)
+
+        return redirect("/user_home/"+current_login.name)
+    return render_template("edit_album.html", album=album_res, album_songs=p_valid_songs)
+
+@app.route("/view_album/<p_name>", methods=["GET", "POST"])
+def view_album(p_name):
+    global current_login
+    album_res = Album.query.filter_by(name=p_name).first()
+    album_songs_res = Song.query.filter_by(album_id=album_res.id,).all()
+    if not current_login:
+        return redirect("/login")
+    if (not album_res):
+        return redirect("/user_home/"+current_login.name)
+    
+    if request.method == "POST":
+        p_rate = float(request.form.get('rate'))
+
+        rating_now = float(album_res.rating)
+        n_rating_now = int(album_res.n_rating)
+
+        db.session.commit()
+        return redirect("/user_home/"+current_login.name)
+
+    return render_template("view_album.html", album=album_res, user=current_login, album_songs=album_songs_res)
+
+@app.route("/delete_album/<p_name>", methods=["GET", "POST"])
+def delete_album(p_name):
+    global current_login
+    album_res = Album.query.filter_by(name=p_name).first()
+    if not current_login:
+        return redirect("/login")
+    if ((not isinstance(current_login, Administrator)) and (current_login.id != album_res.creator_id)):
+        return "Only an <b>Administrator or Respective Creator</b> can delete albums."
+    if (not album_res):
+        return redirect("/user_home/"+current_login.name)
+    
+    try:
+        db.session.delete(album_res)
+        db.session.commit()
+    except Exception as e:
+        print(e)
+    return redirect("/admin_home/"+current_login.name)

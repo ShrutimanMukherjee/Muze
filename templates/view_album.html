@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {{album.name}} </title>
+    <style>
+        table {
+            width : 90%;
+            margin : auto;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        .table_div {
+            width : 50%;
+            margin : auto;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+    </header>
+
+    <div class="table_div">
+        <h2> {{album.name}} </h2>
+        <table style="width:100%;">
+            <tr>
+                <th> Song Name</th>
+                <th> Rating </th>
+                <th> Options </th>
+            </tr>
+
+            {% for song in album_songs %}
+            <tr>
+                <td> {{song.name}} </td>
+                <td> {{song.rating}} </td>
+                <td> 
+                    <audio controls>
+                        <source src="{{url_for('play_song', filename=song.path[ song.path.rindex('/'): ])}}" type="audio/mpeg">
+                        Browser is not compatible with audio tag.
+                    </audio>
+                    <br>
+                    <button onclick="location.href = '/view_song/{{song.name}}';"> View </button>
+                    {% if user.id==song.creator_id %}
+                    <br> <button onclick="location.href = '/edit_song/{{song.name}}';"> Edit </button>
+                    <br> <button onclick="location.href = '/delete_song/{{song.name}}';"> Delete </button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% if user.id==album.creator_id %}
+    <br> <button onclick="location.href = '/edit_album/{{album.name}}';"> Edit Album Details </button>
+    <br> <button onclick="location.href = '/delete_album/{{album.name}}';"> Delete Album </button>
+    {% endif %}
+
+</body>
+</html>
