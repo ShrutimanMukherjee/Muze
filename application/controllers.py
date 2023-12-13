@@ -78,7 +78,8 @@ def admin_login():
     return render_template("login.html", person_type="Administrator")
 
 @app.route("/user_home/<p_name>", methods=["GET", "POST"])
-def user_home(p_name):    
+def user_home(p_name):
+    global current_login
     user_obj = User.query.filter_by(name=p_name).first()     
     if (not user_obj) or (not current_login) or (current_login.name != p_name):
         return redirect("/login")
@@ -113,8 +114,10 @@ def make_creator(p_name):
     user_obj = User.query.filter_by(name=p_name).first() 
     if (not current_login):
         return redirect("/login")
-    user_obj.creator = 1    
+    user_obj.creator = 1
+    current_login.creator = 1
     db.session.commit()    
+    # current_login = user_obj
     return redirect("/user_home/"+p_name)
 
 # -------------- SONG -------------------------------
@@ -226,7 +229,7 @@ def delete_song(p_name):
     song_res = Song.query.filter_by(name=p_name).first()
     if not current_login:
         return redirect("/login")
-    if ((not isinstance(current_login, Administrator)) and (current_login.id != album_res.creator_id)):
+    if ((not isinstance(current_login, Administrator)) and (current_login.id != song_res.creator_id)):
         return "Only an <b>Administrator or Respective Creator</b> can delete songs."
     if (not song_res):
         return redirect("/user_home/"+current_login.name)
