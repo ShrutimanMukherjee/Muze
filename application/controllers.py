@@ -88,8 +88,10 @@ def user_home(p_name):
     user_songs_res = Song.query.filter_by(creator_id=user_obj.id).all()
     albums_res = Album.query.all()
     user_albums_res = Album.query.filter_by(creator_id=user_obj.id).all()
+    user_playlists_res = Playlist.query.filter_by(user_id=user_obj.id).all()
     return render_template("user_home.html", user=user_obj, songs=songs_res, user_songs=user_songs_res,
-                                             albums=albums_res, user_albums=user_albums_res)
+                                             albums=albums_res, user_albums=user_albums_res,
+                                             playlists=user_playlists_res)
 
 @app.route("/admin_home/<p_name>", methods=["GET", "POST"])
 def admin_home(p_name):    
@@ -359,3 +361,35 @@ def delete_album(p_name):
     except Exception as e:
         print(e)
     return redirect("/admin_home/"+current_login.name)
+
+# -------------------------- Playlist -----------------------------------
+@app.route("/add_playlist", methods=["GET", "POST"])
+def add_playlist():
+    global current_login
+    if not current_login:
+        return redirect("/login")
+    
+    p_songs = Song.query.all()
+    
+    if request.method == 'POST':
+        p_name = request.form.get('name')
+        p_song_ids = request.form.getlist('songs')     
+
+        playlist_obj = Playlist(name=p_name, user_id=current_login.id)        
+        # PENDING from here
+        try:
+            db.session.add(playlist_obj)
+            for p_song_id in p_song_ids:
+                song_playlist_obj = Song_Playlist(playlist_id=playlist_obj.id, song_id=p_song_id)
+        except Exception as e:
+            print(e)
+            db.session.rollback()
+            return render_template("add_playlist.html", songs=p_valid_songs)
+        db.session.commit()
+        return redirect("/user_home/"+current_login.name)
+    
+    return render_template("add_playlist.html", songs=p_songs)
+
+#####
+# view playlist --> see if inplace editing is possible
+# edit playlist if in place editing not possible

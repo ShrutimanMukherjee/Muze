@@ -1,0 +1,4 @@
+- delete song file when deleting from db
+- REST api
+- multi user (optional)
+- back to home button

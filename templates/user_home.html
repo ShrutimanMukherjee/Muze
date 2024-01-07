@@ -68,8 +68,9 @@
             Creator registered !
         </span>
         {% endif %}
-        <button onclick="location.href = '/add_song';" id="add_song"> Add New Song </button>
-        <button onclick="location.href = '/add_album';" id="add_album"> Add New Album </button>
+        <button onclick="location.href = '/add_song';" id="add_song"> Add Song </button>
+        <button onclick="location.href = '/add_album';" id="add_album"> Add Album </button>
+        <button onclick="location.href = '/add_playlist';" id="add_playlist"> Add Playlist </button>
         <button onclick="location.href = '/logout';" id="logout"> Log Out </button>
     </header>
 
@@ -89,7 +90,6 @@
                 <td> {{song.singer}} </td>
                 <td> {{song.rating}} </td>
                 <td> 
-                    <!-- <button onclick="location.href = '#';"> Play </button> <br> -->
                     <audio controls>
                         <source src="{{url_for('play_song', filename=song.path[ song.path.rindex('/'): ])}}" type="audio/mpeg">
                         Browser is not compatible with audio tag.
@@ -172,6 +172,27 @@
                     <button onclick="location.href = '/view_album/{{album.name}}';"> View Album</button>
                     <br> <button onclick="location.href = '/edit_album/{{album.name}}';"> Edit Album Details </button>
                     <br> <button onclick="location.href = '/delete_album/{{album.name}}';"> Delete Album </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!-- ---------------------------------------------------------------- -->
+    <div class="table_div">
+        <h2> Your Playlists </h2>
+        <table style="width:100%;">
+            <tr>
+                <th> Playlist Name</th>
+                <th> Options </th>
+            </tr>
+
+            {% for playlist in playlists %}
+            <tr>
+                <td> {{playlist.name}} </td>
+                <td> 
+                    <button> View Playlist</button>
+                    <!-- <button onclick="location.href = '/view_playlist/{{album.name}}';"> View Playlist</button> -->
                 </td>
             </tr>
             {% endfor %}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Album</title>
+    <style>
+        body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 20px;
+        }
+
+        h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        }
+
+        form {
+        width: 400px;
+        margin: 0 auto;
+        }
+
+        label {
+        display: block;
+        margin-bottom: 5px;
+        }
+
+        input {
+        width: 100%;
+        padding: 5px;
+        border: 1px solid #ccc;
+        }
+
+        input[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        margin-top: 10px;
+        cursor: pointer;
+        }
+
+        select {
+        width: 100%;
+        padding: 5px;
+        border: 1px solid #ccc;
+        }
+
+    </style>
+</head>
+<body>
+    <h1> Enter the Playlist details </h1>
+    
+    <form action="/add_playlist" method="post" enctype="multipart/form-data">
+        <div>
+            <label for="name">Playlist Title:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="songs">Choose songs for Album:</label>
+            <select id="songs" name="songs" multiple required>
+                {% for song in songs %} 
+                    <option value="{{song.id}}">{{song.name}} by {{song.singer}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <input type="submit" value="Submit Album">
+        </div>
+    </form>
+
+</body>
+</html>
