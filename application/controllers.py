@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, send_from_directory, url_for
 from flask import render_template, redirect
 from flask import current_app as app
@@ -237,10 +238,18 @@ def delete_song(p_name):
         return redirect("/user_home/"+current_login.name)
     
     try:
+        rsong = open(song_res.path, 'rb')
+        song_path = song_res.path
+        song_str_b = rsong.read()
+        rsong.close()
         db.session.delete(song_res)
         db.session.commit()
     except Exception as e:
         print(e)
+        db.session.rollback()
+        wsong = open(song_path, 'wb')
+        wsong.write(song_str_b)
+        wsong.close()
     return redirect("/admin_home/"+current_login.name)
 
 # -------------------------- Album -----------------------------------
