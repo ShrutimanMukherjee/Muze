@@ -242,6 +242,7 @@ def delete_song(p_name):
         song_path = song_res.path
         song_str_b = rsong.read()
         rsong.close()
+        os.remove(song_path)
         db.session.delete(song_res)
         db.session.commit()
     except Exception as e:

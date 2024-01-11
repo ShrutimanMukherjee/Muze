@@ -1,5 +1,11 @@
-- delete song file when deleting from db
-- sql rollbacks
+pending features
+- view, edit playlist
+- improved styling
+
+bugs to be fixed
+- Song_playlist relational table does not get updated
 - REST api
-- multi user (optional)
+
+Features that can be added
+- multi user
 - back to home button
