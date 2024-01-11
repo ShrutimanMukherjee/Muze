@@ -1,10 +1,6 @@
 import os
 from flask import Flask
-# from application import config
-# from application.config import LocalDevelopmentConfig
-# from application.database import db
 
-# import config
 from .config import LocalDevelopmentConfig
 from .database import db
 
@@ -23,5 +19,5 @@ def create_app():
 
 app = create_app()
 
-# Import all the controllers so they are loaded
-from application.controllers import *
+from .controllers import *
+from .api import api
