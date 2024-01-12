@@ -74,7 +74,9 @@ class UserAPI(Resource):
             return resp
 
         print("Password Changed Successfully")
-        resp = jsonify({"Message" : "Password Changed Successfully"})
+        resp = jsonify({
+            "Message" : "Password Changed Successfully"
+            })
         return resp
 
 class SongAPI(Resource):
@@ -116,7 +118,6 @@ api.add_resource(UserAPI, '/api/user', '/api/user/<string:p_name>')
 api.add_resource(SongAPI, '/api/song', '/api/song/<string:p_name>')
 api.add_resource(AllSongsAPI, '/api/all_songs')
 # curl -X GET http://127.0.0.1:8080/api/user/user1
-# curl -X GET http://127.0.0.1:8080/api/user -H "Content-Type: application/json" -d "{\"name\": \"user1\"}"
 # curl -X PUT http://127.0.0.1:8080/api/user -H "Content-Type: application/json" -d "{\"name\": \"<uname>\", \"password\":\"<oldpwd>\", \"new_password\":\"<newpwd>\"}"
 # curl -X GET http://127.0.0.1:8080/api/all_songs
 # curl -X GET http://127.0.0.1:8080/api/song/Socha%20Hai!
